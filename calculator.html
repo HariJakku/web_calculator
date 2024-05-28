@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f7f7f7;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .calculator {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-image: url('html.jpg'); 
+            background-size: cover;
+            position: relative;
+        }
+
+        .company-name {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .display {
+            font-size: 2em;
+            padding: 10px;
+            background-color: #333;
+            color: #fff;
+            text-align: right;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            overflow-x: auto;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 20px;
+            font-size: 1.5em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #e0e0e0;
+            transition: background-color 0.2s;
+        }
+
+        .btn:active {
+            background-color: #ccc;
+        }
+
+        .operator {
+            background-color: #ff9500;
+            color: #fff;
+        }
+
+        .equals {
+            grid-column: span 3;
+            background-color: #34c759;
+            color: #fff;
+        }
+
+        .backspace {
+            background-color: #ff3b30;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        
+        <div id="display" class="display">0</div>
+        <div class="buttons">
+            <button class="btn" data-value="7">7</button>
+            <button class="btn" data-value="8">8</button>
+            <button class="btn" data-value="9">9</button>
+            <button class="btn operator" data-value="/">/</button>
+            <button class="btn" data-value="4">4</button>
+            <button class="btn" data-value="5">5</button>
+            <button class="btn" data-value="6">6</button>
+            <button class="btn operator" data-value="*">*</button>
+            <button class="btn" data-value="1">1</button>
+            <button class="btn" data-value="2">2</button>
+            <button class="btn" data-value="3">3</button>
+            <button class="btn operator" data-value="-">-</button>
+            <button class="btn" data-value="0">0</button>
+            <button class="btn" data-value=".">.</button>
+            <button class="btn" data-action="clear">C</button>
+            <button class="btn operator" data-value="+">+</button>
+            <button class="btn equals" data-action="calculate">=</button>
+            <button class="btn backspace" data-action="backspace">←</button>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const display = document.getElementById('display');
+            const buttons = document.querySelectorAll('.btn');
+
+            let inputString = '';
+            let resetDisplay = false;
+
+            buttons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const value = this.getAttribute('data-value');
+                    const action = this.getAttribute('data-action');
+
+                    if (action === 'clear') {
+                        inputString = '';
+                        resetDisplay = false;
+                        updateDisplay();
+                        return;
+                    }
+
+                    if (action === 'backspace') {
+                        inputString = inputString.slice(0, -1);
+                        updateDisplay();
+                        return;
+                    }
+
+                    if (action === 'calculate') {
+                        try {
+                            inputString = eval(inputString).toString();
+                        } catch (e) {
+                            inputString = 'Error';
+                        }
+                        resetDisplay = true;
+                        updateDisplay();
+                        return;
+                    }
+
+                    if (resetDisplay) {
+                        if (['+', '-', '*', '/'].includes(value)) {
+                        } else {
+                            inputString = '';
+                            resetDisplay = false;
+                        }
+                    }
+
+                    inputString += value;
+                    updateDisplay();
+                });
+            });
+
+            function updateDisplay() {
+                display.textContent = inputString || '0';
+            }
+        });
+    </script>
+</body>
+</html>
